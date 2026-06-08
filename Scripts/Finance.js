@@ -15,7 +15,7 @@
       total += transaction.amount;
       const item = document.createElement("li");
       item.className = transaction.amount >= 0 ? "income" : "expense";
-      item.textContent = `${transaction.description}: ${transaction.amount.toFixed(2)}`;
+      item.textContent = `${transaction.description}: CHF ${transaction.amount.toFixed(2)}`;
       transactionList.appendChild(item);
     });
 
