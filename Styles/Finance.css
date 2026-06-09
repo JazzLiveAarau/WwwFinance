@@ -1,77 +1,243 @@
-* {
-  box-sizing: border-box;
+/* 
+File: Finance.css Date: 2026-06-08
+
+Author: Gunnar Liden
+
+General information
+====================
+
+Defines all style classes for the Finance application.
+
+*/
+
+/* The whole page  */
+.cl_div_finance_page
+{
+    font-family: 'Arial';
+    font-size: 15px;
+    font-weight: bold;
+    width: 660px;
+    margin-top: 20px;
+    margin-left: 20px;
+    overflow: hidden; 
 }
 
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fb;
-  color: #1f2937;
+/* Text logo <div> element */
+.cl_div_finance_text_logo
+{
+    /* border: solid 2px white; */
+    text-align: center;
+    background-color: black;
+    color: rgb(255, 0, 40);
+    font-size: 18px;
+    font-weight: bold;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    overflow: hidden;   
+    width: 99.5%;
+}
+.cl_finance_title
+{
+    /* border: solid 1px yellow; */
+    width: 80%;
+
+    float: left;
 }
 
-.app {
-  max-width: 720px;
-  margin: 2rem auto;
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 1.5rem;
-  box-shadow: 0 8px 24px rgba(31, 41, 55, 0.08);
+.cl_create_program_title
+{
+    /* border: solid 1px yellow; */
+    width: 80%;
+
+    float: left;
 }
 
-.subtitle {
-  margin-top: 0;
-  color: #4b5563;
+/* For all <label> elements */
+label
+{
+    font-weight: normal
 }
 
-.transaction-form {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)) auto;
-  gap: 0.75rem;
-  align-items: end;
+/* Help and IT info button */
+.cl_help_button_finance
+{
+    border: solid 1px white; 
+    background-color: black;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 3px;
+    margin-left: 28px;
+    cursor: pointer;
+    height: auto;
+    margin-top: 5px;
+    margin-right: 15px;
+    float: right;
 }
 
-label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-  font-weight: 600;
+.cl_finance_step_title
+{
+    width: 100%;
+    padding: 15px;
+    margin-top: 3px;
+    clear: both;   
 }
 
-input {
-  padding: 0.5rem;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
+.cl_finance_import_page
+{
+    border: solid 2px blue;
+    width: 99%;
+    overflow: hidden; 
+    min-height: 120px;
 }
 
-button {
-  padding: 0.55rem 1rem;
-  border: none;
-  border-radius: 6px;
-  background: #2563eb;
-  color: #fff;
-  cursor: pointer;
+.cl_div_import_bank_data
+{
+  border: solid 1px green;
+    width: 95%;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    margin-bottom: 10px;
+    overflow: hidden; 
+    clear: both;
 }
 
-.summary {
-  margin-top: 1.25rem;
+.cl_div_import_button
+{
+    border: solid 1px yellow;
+    text-align: center;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 15px;
+    float:left;
 }
 
-.transaction-list {
-  list-style: none;
-  padding: 0;
-  margin: 1rem 0 0;
+.cl_div_display_file_name_textbox
+{
+    border: solid 1px yellow;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    float: left;
 }
 
-.transaction-list li {
-  padding: 0.65rem 0.75rem;
-  border-radius: 6px;
-  margin-bottom: 0.5rem;
+.cl_div_already_imported_dropdown
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    margin-top: 10px;
+    padding-bottom: 3px;
+    min-height: 20px;
+    clear: both;
 }
 
-.income {
-  background: #dcfce7;
+.cl_finance_select_transaction_page
+{
+    border: solid 2px blue;
+    width: 99%;
+    overflow: hidden; 
+    min-height: 210px;
 }
 
-.expense {
-  background: #fee2e2;
+.cl_div_select_transaction_dropdown
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_transaction_date_textbox
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_reference_number_textbox
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_transaction_amount_textbox
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_transaction_name_textbox
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_transaction_description_textfield
+{
+    border: solid 1px green;
+    margin-left: 15px;
+    padding-bottom: 3px;
+
+    min-height: 40px;
+    clear: both;
+}
+
+.cl_finance_register_transaction_page
+{
+    border: solid 2px blue;
+    width: 99%;
+    overflow: hidden; 
+    min-height: 300px;
+}
+
+.cl_div_register_number_textbox
+{
+    border: solid 1px green;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_register_amount_textbox
+{
+    border: solid 1px green;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_select_type_dropdown
+{
+    border: solid 1px green;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_register_description_textbox
+{
+    border: solid 1px green;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-bottom: 3px;
+    clear: both;
+}
+
+.cl_div_upload_document
+{
+    border: solid 1px green;
+    margin-left: 25px;
+    margin-right: 25px;
+    padding-bottom: 3px;
+    clear: both;
 }

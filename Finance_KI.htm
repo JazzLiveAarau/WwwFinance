@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Finance created by KI</title>
+  <link rel="stylesheet" href="Styles/Finance_KI.css">
+</head>
+<body>
+  <main class="app">
+    <h1>Finance Overview</h1>
+    <p class="subtitle">Track simple club income and expenses.</p>
+
+    <form id="transaction-form" class="transaction-form">
+      <label for="description">
+        Description
+        <input id="description" name="description" type="text" required>
+      </label>
+      <label for="amount">
+        Amount
+        <input id="amount" name="amount" type="number" step="0.01" required>
+      </label>
+      <button type="submit">Add</button>
+    </form>
+
+    <section class="summary">
+      <h2>Balance: CHF <span id="balance">0.00</span></h2>
+    </section>
+
+    <ul id="transaction-list" class="transaction-list"></ul>
+  </main>
+
+  <script src="Scripts/Finance_KI.js"></script>
+</body>
+</html>
