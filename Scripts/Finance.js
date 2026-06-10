@@ -1,5 +1,5 @@
 // File: Finance.js
-// Date: 2026-06-09
+// Date: 2026-06-10
 // Author: Gunnar Lidén
 
 // Inhalt
@@ -30,7 +30,7 @@ function initFinance()
    debugFinance('Initializing Finance application...');
 
    var sub_dir = 'XmlBank/';
-   var xml_bank_camt_file_name = 'BankCamt053.xml';
+   var xml_bank_camt_file_name = 'BankCamt053_Details.xml';
 
    var callback_function = onBankCamtXmlLoaded;
 
@@ -83,9 +83,9 @@ function onBankCamtXmlLoaded()
 
     debugFinance('Credit or debit indicator for entry number ' + entry_number + ': ' + entry_credit_or_debit_indicator);
 
-    var b_entry_gredit = g_bank_camt_xml.isEntryCredit(statement_number, entry_number);
+    var b_entry_credit = g_bank_camt_xml.isEntryCredit(statement_number, entry_number);
 
-    debugFinance('Is entry credit for entry number ' + entry_number + ': ' + b_entry_gredit);
+    debugFinance('Is entry credit for entry number ' + entry_number + ': ' + b_entry_credit);
 
     var booking_date = g_bank_camt_xml.getBookingDate(statement_number, entry_number);
 
@@ -98,6 +98,18 @@ function onBankCamtXmlLoaded()
      var additional_information = g_bank_camt_xml.getAdditionalEntryInformation(statement_number, entry_number);
 
     debugFinance('Additional entry information for entry number ' + entry_number + ': ' + additional_information);
+
+    var debtor_name = g_bank_camt_xml.getDebtorName(statement_number, entry_number);
+
+    debugFinance('Debtor name for entry number ' + entry_number + ': ' + debtor_name);
+
+    var debtor_iban = g_bank_camt_xml.getDebtorIban(statement_number, entry_number);
+
+    debugFinance('Debtor IBAN for entry number ' + entry_number + ': ' + debtor_iban);
+
+    var debtor_address = g_bank_camt_xml.getDebtorAddress(statement_number, entry_number);
+
+    debugFinance('Debtor address for entry number ' + entry_number + ': ' + debtor_address);
 
 } // onBankCamtXmlLoaded
 

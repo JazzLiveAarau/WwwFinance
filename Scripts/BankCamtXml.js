@@ -1,5 +1,5 @@
 // File: BankCamtXml.js
-// Date: 2026-06-08
+// Date: 2026-06-10
 // Author: Gunnar Lidén
 
 
@@ -146,11 +146,31 @@ class BankCamtXml
     /////// End Get Entry Functions ///////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////
 
-/*
+    ///////////////////////////////////////////////////////////////////////////
+    /////// Start Get Entry Details Functions /////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
 
-    (){return this.m_tag_additional_entry_information;}
+    // Returns the name of the debtor, i.e. the value of the tag <Nm> in the XML file for a given entry (transaction) number
+    getDebtorName(i_statement_number, i_entry_number)
+    {
+        return this.getEntryDetailsNodeValue(this.m_tags.getName(), i_statement_number, i_entry_number);
 
-*/
+    } // getDebtorName
+
+   // Returns the IBAN of the debtor, i.e. the value of the tag <IBAN> in the XML file for a given entry (transaction) number
+    getDebtorIban(i_statement_number, i_entry_number)
+    {
+        return this.getEntryDetailsNodeValue(this.m_tags.getDebtorAccountIban(), i_statement_number, i_entry_number);
+        
+    } // getDebtorIban
+
+   // Returns the address of the debtor, i.e. the value of the tag <Adr> in the XML file for a given entry (transaction) number
+    getDebtorAddress(i_statement_number, i_entry_number)
+    {
+        return this.getEntryDetailsNodeValue(this.m_tags.getPostalAddress(), i_statement_number, i_entry_number);
+        
+    } // getDebtorAddress
+
 
     ///////////////////////////////////////////////////////////////////////////
     /////// Start Get Functions ///////////////////////////////////////////////
@@ -159,6 +179,150 @@ class BankCamtXml
     ///////////////////////////////////////////////////////////////////////////
     ///////////////////////// Start Record Node Value  ////////////////////////
     ///////////////////////////////////////////////////////////////////////////
+
+    // Returns the node value for a given tag name in the entry details node for a given entry (transaction) number
+    getEntryDetailsNodeValue(i_record_tag, i_statement_number, i_entry_number)
+    {
+        var ret_data = '';
+
+        var n_statements = this.getNumberOfStatements();
+
+        if (i_statement_number < 1 || i_statement_number > n_statements)
+        {
+            alert("BankCamtXml.getEntryDetailsNodeValue Statement number is not between 1 and " + n_statements.toString());
+            return ret_data;		
+        }
+        var n_records = this.getNumberOfEntries(i_statement_number);
+        
+        if (i_entry_number < 1 || i_entry_number > n_records)
+        {
+            alert("BankCamtXml.getEntryDetailsNodeValue Record number is not between 1 and " + n_records.toString());
+            return ret_data;		
+        }
+
+        var statement_rec_nodes = this.getXmlObject().getElementsByTagName(this.m_tags.getStatement());
+
+        var entry_rec_nodes = statement_rec_nodes[i_statement_number - 1].getElementsByTagName(this.m_tags.getEntry());
+
+        var entry_rec_node = entry_rec_nodes[i_entry_number-1];
+
+        var entry_details_rec_nodes = entry_rec_node.getElementsByTagName(this.m_tags.getEntryDetails());
+
+        if (entry_details_rec_nodes.length == 0 || entry_details_rec_nodes.length > 1)
+        {
+            alert("BankCamtXml.getEntryDetailsNodeValue Entry details node not found or multiple found for statement number " + i_statement_number.toString() + " and entry number " + i_entry_number.toString());
+            return ret_data;
+        }
+
+        var entry_details_rec_node = entry_details_rec_nodes[0];
+
+        var related_parties_rec_nodes = entry_details_rec_node.getElementsByTagName(this.m_tags.getRelatedParties());
+
+        if (related_parties_rec_nodes.length == 0 || related_parties_rec_nodes.length > 1)
+        {
+            alert("BankCamtXml.getEntryDetailsNodeValue Related parties node not found or multiple found for statement number " + i_statement_number.toString() + " and entry number " + i_entry_number.toString());
+
+            return ret_data;
+
+        }
+
+        var related_parties_rec_node = related_parties_rec_nodes[0];
+
+        if (i_record_tag == this.m_tags.getName() || i_record_tag == this.m_tags.getDebtorAccountIban())
+        {
+            ret_data = this.getEntryDetailsNameOrIbanNodeValue(i_record_tag, related_parties_rec_node);
+        }
+        else if (i_record_tag == this.m_tags.getPostalAddress())
+        {
+            ret_data = this.getEntryDetailsAddressNodeValue(i_record_tag, related_parties_rec_node);
+        }
+        else
+        {
+            alert("BankCamtXml.getEntryDetailsNodeValue Invalid record tag: " + i_record_tag);
+
+            return ret_data;
+        }
+
+        return ret_data;
+
+    } // getEntryDetailsNodeValue
+
+    // Returns the node value for a given tag name in the related parties node for a given entry (transaction) number
+    getEntryDetailsNameOrIbanNodeValue(i_record_tag, i_related_parties_rec_node)
+    {
+        var ret_data = '';
+
+        var name_or_iban_rec_nodes = i_related_parties_rec_node.getElementsByTagName(i_record_tag);
+
+        var name_or_iban_rec_node = name_or_iban_rec_nodes[0];
+
+        var xml_node_value = this.getNodeValue(name_or_iban_rec_node);
+
+        ret_data = xml_node_value;
+
+        return ret_data;
+
+    } // getEntryDetailsNameOrIbanNodeValue
+
+    // Returns the node value for a given tag name in the related parties node for a given entry (transaction) number
+    getEntryDetailsAddressNodeValue(i_record_tag, i_related_parties_rec_node)
+    {
+        var ret_address_data = '';
+
+        var debtor_rec_nodes = i_related_parties_rec_node.getElementsByTagName(this.m_tags.getDebtor());
+
+        var debtor_rec_node = debtor_rec_nodes[0];
+
+        var postal_addess_rec_nodes = debtor_rec_node.getElementsByTagName(this.m_tags.getPostalAddress());
+
+        var postal_addess_rec_node = postal_addess_rec_nodes[0];
+
+        var street_name_nodes = postal_addess_rec_node.getElementsByTagName(this.m_tags.getStreetName());
+
+        var building_number_nodes = postal_addess_rec_node.getElementsByTagName(this.m_tags.getBuildingNumber());
+
+        var postal_code_nodes = postal_addess_rec_node.getElementsByTagName(this.m_tags.getPostalCode());
+
+        var town_name_nodes = postal_addess_rec_node.getElementsByTagName(this.m_tags.getTownName());
+
+        var country_nodes = postal_addess_rec_node.getElementsByTagName(this.m_tags.getCountry());
+
+        var address_line_nodes = postal_addess_rec_node.getElementsByTagName(this.m_tags.getAddressLine());
+
+        if (street_name_nodes.length > 0)
+        {
+            ret_address_data += this.getNodeValue(street_name_nodes[0]) + ', ';
+        }
+        if (street_name_nodes.length > 0)
+        {
+            ret_address_data += this.getNodeValue(street_name_nodes[0]) + ', ';
+        }
+        if (building_number_nodes.length > 0)
+        {
+            ret_address_data += this.getNodeValue(building_number_nodes[0]) + ', ';
+        }
+        if (postal_code_nodes.length > 0)
+        {
+            ret_address_data += this.getNodeValue(postal_code_nodes[0]) + ', ';
+        }
+        if (town_name_nodes.length > 0)
+        {
+            ret_address_data += this.getNodeValue(town_name_nodes[0]) + ', ';
+        }
+        if (country_nodes.length > 0)
+        {
+            ret_address_data += this.getNodeValue(country_nodes[0]) + ', ';
+        }
+        if (address_line_nodes.length > 0)
+        {
+            for (var index_line = 0; index_line < address_line_nodes.length; index_line++)
+            {
+                ret_address_data += this.getNodeValue(address_line_nodes[index_line]) + ', ';
+            }
+        }
+
+        return ret_address_data;
+    } //
 
     // Returns the statement balance node value for a given statement number, a tag name and a flag for opening or closing balance
     getStatementBalanceNodeValue(i_record_tag, i_statement_number, i_b_opening)
@@ -617,14 +781,45 @@ class BankCamtTags
                      // Tag for the related parties. The related parties contains information about the counterparty of the 
                      // transaction on the bank account, e.g. the name of the counterparty, the IBAN of the counterparty, etc.
                     this.m_tag_related_parties = "RltdPties"; 
+                        // Tag for the debtor. The debtor contains information about the debtor of the transaction on 
+                        // the bank account, e.g. the name of the debtor, the IBAN of the debtor, etc.
+                        this.m_tag_debtor = "Dbtr";
+                            // Tag for the name of the debtor. The name of the debtor contains the name of the debtor of the transaction on the bank account
+                            this.m_tag_name = "Nm";
+                            // Tag for the postal address of the debtor. The postal address of the debtor contains 
+                            // the postal address of the debtor of the transaction on the bank account
+                            this.m_tag_postal_address = "PstlAdr";
+                                // Tag for the street name of the postal address of the debtor. The street name of the postal address of the debtor contains the street name of the postal address of the debtor of the transaction on the bank account
+                                this.m_tag_street_name = "StrtNm";
+                                // Tag for the building number of the postal address of the debtor. The building number of the postal address of the debtor contains the building number of the postal address of the debtor of the transaction on the bank account
+                                this.m_tag_building_number = "BldgNb";
+                                // Tag for the postal code of the postal address of the debtor. The postal code of the postal address of the debtor contains the postal code of the postal address of the debtor of the transaction on the bank account
+                                this.m_tag_postal_code = "PstCd";
+                                // Tag for the town name of the postal address of the debtor. The town name of the postal address of the debtor contains the town name of the postal address of the debtor of the transaction on the bank account
+                                this.m_tag_town_name = "TwnNm";
+                                // Tag for the country of the postal address of the debtor. The country of the postal address of the debtor contains the country of the postal address of the debtor of the transaction on the bank account
+                                this.m_tag_country = "Ctry";
+                                // Tag for the address line of the postal address of the debtor. The address line of the postal address of the debtor contains the address line of the postal address of the debtor of the transaction on the bank account
+                                this.m_tag_address_line = "AdrLine";
+                        // Tag for the creditor. The creditor contains information about the creditor of the transaction on the bank account, e.g. the name of the creditor, the IBAN of the creditor, etc.
+                        this.m_tag_debtor_account = "DbtrAcct";
+                            // Tag for the account of the debtor. The account of the debtor contains information about the account of the debtor of the transaction on the bank account, e.g. the IBAN of the account of the debtor, etc.
+                            this.m_tag_debtor_account_id = "Id";
+                                // Tag for the IBAN of the account of the debtor. The IBAN of the account of the debtor contains the IBAN of the account of the debtor of the transaction on the bank account
+                                this.m_tag_debtor_account_iban = "IBAN";
 
-                    // Tag for the debtor. The debtor contains information about the debtor of the transaction on 
-                    // the bank account, e.g. the name of the debtor, the IBAN of the debtor, etc.
-                    this.m_tag_debtor = "Dbtr";
-                        // Tag for the name of the debtor. The name of the debtor contains the name of the debtor of the transaction on the bank account
-                        this.m_tag_name = "Nm";
-                   
-    }
+
+
+
+    } // constructor
+
+/*
+                            <DbtrAcct>
+                                <Id>
+                                    <IBAN>CH1780808009616105371</IBAN>
+                                </Id>
+                            </DbtrAcct>  
+*/
 
     getGroupHeader(){return this.m_tag_group_header;} 
     getMessageId(){return this.m_tag_message_id;}
@@ -651,11 +846,21 @@ class BankCamtTags
     getValueDate(){return this.m_tag_value_date;}
     getDate(){return this.m_date_tag;}
     getAdditionalEntryInformation(){return this.m_tag_additional_entry_information;}
+    getStreetName(){return this.m_tag_street_name;}
+    getBuildingNumber(){return this.m_tag_building_number;}
+    getPostalCode(){return this.m_tag_postal_code;}
+    getTownName(){return this.m_tag_town_name;}
+    getCountry(){return this.m_tag_country;}
+    getAddressLine(){return this.m_tag_address_line;}
+    getDebtorAccount(){return this.m_tag_debtor_account;}
+    getDebtorAccountId(){return this.m_tag_debtor_account_id;}
+    getDebtorAccountIban(){return this.m_tag_debtor_account_iban;}
 
     getEntryDetails(){return this.m_tag_entry_details;}
     getTransactionDetails(){return this.m_tag_transaction_details;}
     getRelatedParties(){return this.m_tag_related_parties;}
     getDebtor(){return this.m_tag_debtor;}
     getName(){return this.m_tag_name;}
+    getPostalAddress(){return this.m_tag_postal_address;}
 
 } // BankCamtTags
