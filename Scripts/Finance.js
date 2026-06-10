@@ -22,6 +22,9 @@ var g_number_of_entries = 0;
 // Global variable for the current entry number
 var g_current_entry_number = 1;
 
+// Global variable selected element number in the dropdown control
+var g_current_category_number = -12345;
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// End Global Parameters ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -102,6 +105,34 @@ function onChangeEntryNumber()
 
 } // onChangeEntryNumber
 
+// Function that is called when the save button is clicked
+function onClickSaveCategoryButton()
+{
+    debugFinance('Save button clicked.');
+
+} // onClickSaveCategoryButton
+
+// Function that is called when the cancel button is clicked
+function onClickCancelCategoryButton()
+{
+    debugFinance('Cancel button clicked.');
+
+} // onClickCancelCategoryButton
+
+// Function that is called when the upload document button is clicked
+function onClickUploadDocumentButton()
+{
+    debugFinance('Upload document button clicked.');
+
+} // onClickUploadDocumentButton
+
+// Function that is called when the category dropdown selection is changed
+function eventSelectCategoryDropDown()
+{
+    debugFinance('Category dropdown selection changed.');
+
+} // eventSelectCategoryDropDown
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// End Event Functions /////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -121,7 +152,11 @@ function setFinanceControls()
 
     g_entry_ref_number_textbox.setValue(g_bank_camt_xml.getAccountServicerReference(g_current_statement_number, g_current_entry_number));
 
-    g_entry_amount_textbox.setValue(g_bank_camt_xml.getAmount(g_current_statement_number, g_current_entry_number));
+    var entry_amount = g_bank_camt_xml.getAmount(g_current_statement_number, g_current_entry_number);
+
+     debugFinance('Entry amount: ' + entry_amount);
+
+    g_entry_amount_textbox.setValue(entry_amount);
 
     var indicator_str = '';
 
@@ -143,6 +178,25 @@ function setFinanceControls()
     g_entry_deptor_iban_textbox.setValue(g_bank_camt_xml.getDebtorIban(g_current_statement_number, g_current_entry_number));
 
     g_entry_deptor_address_textbox.setValue(g_bank_camt_xml.getDebtorAddress(g_current_statement_number, g_current_entry_number));
+
+    var entry_amount_sign = null;
+
+    if (g_bank_camt_xml.isEntryCredit(g_current_statement_number, g_current_entry_number))
+    {
+        entry_amount_sign_str = entry_amount;
+    }
+    else
+    {
+        entry_amount_sign_str = -entry_amount;
+    }
+
+    g_category_reg_number_textbox.setValue('REG_2026_023');
+
+    g_category_part_amount_textbox.setValue(entry_amount_sign_str);
+
+    g_category_rest_amount_textbox.setValue('0');
+
+    g_category_description_textbox.setValue('');
 
 } // setFinanceControls
 

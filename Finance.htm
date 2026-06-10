@@ -89,7 +89,7 @@
 
               <div id="id_div_transaction_description_textbox" class="cl_div_transaction_description_textbox">Beschreibung der Buchung</div>
 
-              <div id="id_transaction_row_one" class="cl_transaction_row">
+              <div id="id_transaction_row_two" class="cl_transaction_row">
                   <div id="id_div_transaction_name_textbox" class="cl_div_transaction_name_textbox">Der Name des Zahlers</div>
 
                   <div id="id_div_transaction_iban_textbox" class="cl_div_transaction_iban_textbox">IBAN des Zahlers</div>
@@ -105,19 +105,32 @@
          
             <div id="id_finance_register_transaction_page" class="cl_finance_register_transaction_page">
 
-              <div class="cl_finance_step_title">3. Transaktion registrieren. Datum und eindeutige Referenznummer werden übernommen.</div>
+              <div class="cl_finance_step_title">3. Transaktion kategorisieren.</div>
 
-              <div id="id_div_register_number_textbox" class="cl_div_register_number_textbox">Eindeutige Registrierungsnummer</div>
+              <div id="id_transaction_row_three" class="cl_transaction_row">
+                  <div id="id_div_register_number_textbox" class="cl_div_register_number_textbox">Eindeutige Registrierungsnummer</div>
 
-              <div id="id_div_register_amount_textbox" class="cl_div_register_amount_textbox">Teil-Betrag und Debit/Credit</div>
+                  <div id="id_div_register_amount_textbox" class="cl_div_register_amount_textbox">Teil-Betrag</div>
 
-              <div id = "id_div_select_type_dropdown" class = "cl_div_select_type_dropdown">Dropdown Kostenart</div>
+                  <div id="id_div_register_rest_amount_textbox" class="cl_div_register_amount_textbox">Rest-Betrag</div>
+
+                  <div id = "id_div_select_category_dropdown" class = "cl_div_select_category_dropdown">Dropdown Kostenart</div>
+
+              </div> <!-- cl_transaction_row -->
 
               <div id = "id_div_register_description_textbox" class = "cl_div_register_description_textbox">Beschreibung</div>
 
-              <div id = "id_div_upload_document" class = "cl_div_upload_document">Beleg hochladen</div>
+              <div id = "id_div_upload_document" class = "cl_div_upload_button">Beleg hochladen</div>
 
-              <div class="cl_finance_step_title"> Zusätzliche Posten bis die ganze Summe "verwendet" ist</div>
+              <div id="id_transaction_row_four" class="cl_transaction_row">
+
+                  <div id="id_div_save_category_button" class="cl_div_save_button">Speichern Button</div>
+
+                  <div id="id_div_cancel_category_button" class="cl_div_save_button">Abbrechen Button</div>
+
+              </div> <!-- cl_transaction_row -->
+
+              
 
 
             </div>  <!-- id_finance_register_transaction_page -->
