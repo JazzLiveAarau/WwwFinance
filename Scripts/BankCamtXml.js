@@ -90,6 +90,34 @@ class BankCamtXml
         
     } // getAmount
 
+    // Returns the credit or debit indicator, i.e. the value of the tag <CdtDbtInd> 
+    // in the XML file for a given entry (transaction) number
+    getEntryCreditOrDebitIndicator(i_statement_number, i_entry_number)
+    {
+        return this.getEntryNodeValue(this.m_tags.getEntryCreditOrDebitIndicator(), i_statement_number, i_entry_number);
+
+    } // getEntryCreditOrDebitIndicator
+
+    // Returns true if the entry is a credit, false if the entry is a debit. The function is based on the value of the tag <CdtDbtInd> in the XML file for a given entry (transaction) number
+    isEntryCredit(i_statement_number, i_entry_number)
+    {
+        var credit_or_debit_indicator = this.getEntryCreditOrDebitIndicator(i_statement_number, i_entry_number);
+
+        if (credit_or_debit_indicator == "CRDT")
+        {
+            return true;
+        }
+        else if (credit_or_debit_indicator == "DBIT")
+        {
+            return false;
+        }
+        else        {
+            alert("BankCamtXml.isEntryCredit Invalid credit or debit indicator: " + credit_or_debit_indicator);
+            return null;
+        }
+
+    } // isEntryCredit
+
     // Returns the booking date, i.e. the value of the tag <BookgDt> 
     // in the XML file for a given entry (transaction) number
     getBookingDate(i_statement_number, i_entry_number)
@@ -275,8 +303,27 @@ class BankCamtXml
         var entry_rec_nodes = statement_rec_nodes[i_statement_number - 1].getElementsByTagName(this.m_tags.getEntry());
 
         var entry_rec_node = entry_rec_nodes[i_entry_number-1];
-        
-        var xml_node_value = this.getNodeValueTagName(entry_rec_node, i_record_tag);
+
+        var xml_node_value = '';
+
+        if (i_record_tag == this.m_tags.getBookingDate() || i_record_tag == this.m_tags.getValueDate())
+        {
+            var date_tag_name = this.m_tags.getDate();
+
+            var rec_booking_or_value_nodes = entry_rec_node.getElementsByTagName(i_record_tag); // All Booking or Value date nodes
+
+            var rec_booking_or_value_node = rec_booking_or_value_nodes[0]; // Booking or Value node
+
+            var date_nodes = rec_booking_or_value_node.getElementsByTagName(date_tag_name); // All date nodes
+
+            var date_node = date_nodes[0]; // Date node
+
+            xml_node_value = this.getNodeValue(date_node);
+        }
+        else
+        {
+            xml_node_value = this.getNodeValueTagName(entry_rec_node, i_record_tag);
+        }
 
         ret_data = xml_node_value;
         
@@ -548,19 +595,22 @@ class BankCamtTags
             this.m_tag_account_servicer_reference = "AcctSvcrRef";
             // Tag for the amount. The amount contains the amount of the transaction on the bank account
             this.m_tag_amount = "Amt";
+            // Tag for the credit or debit indicator. The credit or debit indicator contains the indicator whether the transaction is a credit or a debit
+            this.m_tag_entry_credit_or_debit_indicator = "CdtDbtInd";
             // Tag for the booking date. The booking date is the date when the transaction was booked on the bank account
             // Note: Date is in the child node <Dt> !!!!
             this.m_tag_booking_date = "BookgDt";
             // Tag for the value date. The value date is the date when the transaction was executed on the bank account
             // Note: Date is in the child node <Dt> !!!!
             this.m_tag_value_date = "ValDt";
+            // Tag for the date. The date is the date when the transaction was executed on the bank account
+            this.m_date_tag = "Dt";
             // Tag for the additional entry information. The additional entry information contains 
             // additional information about the transaction on the bank account
             this.m_tag_additional_entry_information = "AddtlNtryInf";
 
             // Tag for the entry details. The entry details contains additional information about the transaction on the bank account, e.g. the name of the counterparty, the IBAN of the counterparty, etc.
             this.m_tag_entry_details = "NtryDtls";
-
                 // Tag for the transaction details. The transaction details contains additional information 
                 // about the transaction on the bank account, e.g. the name of the counterparty, the IBAN of the counterparty, etc.
                 this.m_tag_transaction_details = "TxDtls";
@@ -596,8 +646,10 @@ class BankCamtTags
     getEntry(){return this.m_tag_entry;} 
     getAccountServicerReference(){return this.m_tag_account_servicer_reference;}
     getAmount(){return this.m_tag_amount;}
+    getEntryCreditOrDebitIndicator(){return this.m_tag_entry_credit_or_debit_indicator;}
     getBookingDate(){return this.m_tag_booking_date;}
     getValueDate(){return this.m_tag_value_date;}
+    getDate(){return this.m_date_tag;}
     getAdditionalEntryInformation(){return this.m_tag_additional_entry_information;}
 
     getEntryDetails(){return this.m_tag_entry_details;}

@@ -79,6 +79,14 @@ function onBankCamtXmlLoaded()
 
     debugFinance('Amount for entry number ' + entry_number + ': ' + entry_amount);
 
+    var entry_credit_or_debit_indicator = g_bank_camt_xml.getEntryCreditOrDebitIndicator(statement_number, entry_number);
+
+    debugFinance('Credit or debit indicator for entry number ' + entry_number + ': ' + entry_credit_or_debit_indicator);
+
+    var b_entry_gredit = g_bank_camt_xml.isEntryCredit(statement_number, entry_number);
+
+    debugFinance('Is entry credit for entry number ' + entry_number + ': ' + b_entry_gredit);
+
     var booking_date = g_bank_camt_xml.getBookingDate(statement_number, entry_number);
 
     debugFinance('Booking date for entry number ' + entry_number + ': ' + booking_date);
