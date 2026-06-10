@@ -210,7 +210,7 @@ class BankCamtXml
 
         if (entry_details_rec_nodes.length == 0 || entry_details_rec_nodes.length > 1)
         {
-            alert("BankCamtXml.getEntryDetailsNodeValue Entry details node not found or multiple found for statement number " + i_statement_number.toString() + " and entry number " + i_entry_number.toString());
+            debugFinance("BankCamtXml.getEntryDetailsNodeValue Entry details node not found or multiple found for statement number " + i_statement_number.toString() + " and entry number " + i_entry_number.toString());
             return ret_data;
         }
 
@@ -220,7 +220,7 @@ class BankCamtXml
 
         if (related_parties_rec_nodes.length == 0 || related_parties_rec_nodes.length > 1)
         {
-            alert("BankCamtXml.getEntryDetailsNodeValue Related parties node not found or multiple found for statement number " + i_statement_number.toString() + " and entry number " + i_entry_number.toString());
+            debugFinance("BankCamtXml.getEntryDetailsNodeValue Related parties node not found or multiple found for statement number " + i_statement_number.toString() + " and entry number " + i_entry_number.toString());
 
             return ret_data;
 
@@ -238,7 +238,7 @@ class BankCamtXml
         }
         else
         {
-            alert("BankCamtXml.getEntryDetailsNodeValue Invalid record tag: " + i_record_tag);
+            debugFinance("BankCamtXml.getEntryDetailsNodeValue Invalid record tag: " + i_record_tag);
 
             return ret_data;
         }
@@ -253,6 +253,12 @@ class BankCamtXml
         var ret_data = '';
 
         var name_or_iban_rec_nodes = i_related_parties_rec_node.getElementsByTagName(i_record_tag);
+
+        if (name_or_iban_rec_nodes.length == 0)
+        {
+            alert("BankCamtXml.getEntryDetailsNameOrIbanNodeValue Name or IBAN node not found or multiple found for record tag: " + i_record_tag);
+            return ret_data;
+        }
 
         var name_or_iban_rec_node = name_or_iban_rec_nodes[0];
 

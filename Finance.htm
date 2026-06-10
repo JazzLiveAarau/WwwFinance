@@ -18,6 +18,9 @@
   <!--  Main functions for the finance application -->
   <script type="text/javascript" src="Scripts/Finance.js"></script>
 
+  <!-- The controls for the finance application -->
+  <script type="text/javascript" src="Scripts/FinanceControls.js"></script>
+
   <!--  Cash management XML from a bank Format: ISO20022 CAMT.053 -->
   <script type="text/javascript" src="Scripts/BankCamtXml.js"></script>
 
@@ -68,19 +71,33 @@
          
             <div id="id_finance_select_transaction_page" class="cl_finance_select_transaction_page">
             
-              <div class="cl_finance_step_title">2. Transaktion auswählen (die noch nicht registriert/behandelt ist)</div>
+              <div class="cl_finance_step_title">2. Transaktion der Bank</div>
 
-              <div id = "id_div_select_transaction_dropdown" class = "cl_div_select_transaction_dropdown">Dropdown Transaktionen wählen</div>
+              <div id = "id_div_select_transaction_textbox" class = "cl_div_select_transaction_textbox">Transaktion Nummer</div>
 
-              <div id="id_div_transaction_date_textbox" class="cl_div_transaction_date_textbox">Datum der Buchung</div>
+                <div id="id_transaction_row_one" class="cl_transaction_row">
 
-              <div id="id_div_reference_number_textbox" class="cl_div_reference_number_textbox">Eindeutige Referenznummer der Buchung</div>
+                  <div id="id_div_transaction_date_textbox" class="cl_div_transaction_date_textbox">Datum der Buchung</div>
 
-              <div id="id_div_transaction_amount_textbox" class="cl_div_transaction_amount_textbox">Betrag der Buchung und Debit/Credit Info</div>
+                  <div id="id_div_reference_number_textbox" class="cl_div_reference_number_textbox">Eindeutige Referenznummer der Buchung</div>
 
-               <div id="id_div_transaction_name_textbox" class="cl_div_transaction_name_textbox">Der Name des Zahlers</div>
+                  <div id="id_div_transaction_amount_textbox" class="cl_div_transaction_amount_textbox">Betrag der Buchung</div>
 
-              <div id="id_div_transaction_description_textfield" class="cl_div_transaction_description_textfield">Beschreibung der Buchung</div>
+                  <div id="id_div_transaction_debit_credit_textbox" class="cl_div_transaction_debit_credit_textbox">Debit/Credit Info</div>
+              
+                </div> <!-- cl_transaction_row -->
+
+              <div id="id_div_transaction_description_textbox" class="cl_div_transaction_description_textbox">Beschreibung der Buchung</div>
+
+              <div id="id_transaction_row_one" class="cl_transaction_row">
+                  <div id="id_div_transaction_name_textbox" class="cl_div_transaction_name_textbox">Der Name des Zahlers</div>
+
+                  <div id="id_div_transaction_iban_textbox" class="cl_div_transaction_iban_textbox">IBAN des Zahlers</div>
+              </div>
+
+              <div id="id_div_transaction_address_textbox" class="cl_div_transaction_address_textbox">Adresse des Zahlers</div>
+
+               
 
             </div>  <!-- id_finance_select_transaction_page -->
 

@@ -14,6 +14,14 @@
 // Global variable for the XML bank file
 var g_bank_camt_xml = null; 
 
+// Global variable for the current statement number
+var g_current_statement_number = 1;
+
+var g_number_of_entries = 0;
+
+// Global variable for the current entry number
+var g_current_entry_number = 1;
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// End Global Parameters ///////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -29,6 +37,8 @@ function initFinance()
 {
    debugFinance('Initializing Finance application...');
 
+   g_current_entry_number = 1;
+
    var sub_dir = 'XmlBank/';
    var xml_bank_camt_file_name = 'BankCamt053_Details.xml';
 
@@ -42,6 +52,126 @@ function initFinance()
 function onBankCamtXmlLoaded()
 {
     debugFinance('Bank CAMT XML file loaded successfully.');
+
+    g_number_of_entries = g_bank_camt_xml.getNumberOfEntries(g_current_statement_number);
+
+    debugFinance('Number of entries: ' + g_number_of_entries);
+
+    bankDataToConsole();
+
+    createFinanceControls();
+    
+    setFinanceControls();
+
+} // onBankCamtXmlLoaded
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// End Main Functions //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// Start Event Functions ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Function that is called when the entry number text box value is changed
+function onChangeEntryNumber()
+{
+    var entry_number_str = g_entry_number_textbox.getValue();
+
+    debugFinance('Entry number changed: ' + entry_number_str);
+
+    var entry_number = parseInt(entry_number_str);
+
+    if (isNaN(entry_number))
+    {
+        debugFinance('Invalid entry number: ' + entry_number_str);
+        return;
+    }
+
+    if (entry_number < 1 || entry_number > g_number_of_entries)
+    {
+        debugFinance('Entry number out of range: ' + entry_number);
+        return;
+    }
+
+    g_current_entry_number = entry_number;
+
+    debugFinance('Global variable g_current_entry_number set to: ' + g_current_entry_number);
+
+    setFinanceControls();
+
+} // onChangeEntryNumber
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// End Event Functions /////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// Start Set Controls //////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Set the values of the controls for the 'Finance' application
+function setFinanceControls()
+{
+    debugFinance('Setting finance controls for entry number: ' + g_current_entry_number);
+
+    g_entry_number_textbox.setValue(g_current_entry_number.toString());
+
+    g_entry_date_textbox.setValue(g_bank_camt_xml.getBookingDate(g_current_statement_number, g_current_entry_number));
+
+    g_entry_ref_number_textbox.setValue(g_bank_camt_xml.getAccountServicerReference(g_current_statement_number, g_current_entry_number));
+
+    g_entry_amount_textbox.setValue(g_bank_camt_xml.getAmount(g_current_statement_number, g_current_entry_number));
+
+    var indicator_str = '';
+
+    if (g_bank_camt_xml.isEntryCredit(g_current_statement_number, g_current_entry_number))
+    {
+        indicator_str = 'Credit';
+    }
+    else
+    {
+        indicator_str = 'Debit';
+    }
+
+    g_entry_debit_credit_textbox.setValue(indicator_str);
+
+    g_entry_description_textbox.setValue(g_bank_camt_xml.getAdditionalEntryInformation(g_current_statement_number, g_current_entry_number));
+
+    g_entry_deptor_name_textbox.setValue(g_bank_camt_xml.getDebtorName(g_current_statement_number, g_current_entry_number));
+
+    g_entry_deptor_iban_textbox.setValue(g_bank_camt_xml.getDebtorIban(g_current_statement_number, g_current_entry_number));
+
+    g_entry_deptor_address_textbox.setValue(g_bank_camt_xml.getDebtorAddress(g_current_statement_number, g_current_entry_number));
+
+} // setFinanceControls
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// End Set Controls ////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////// Start Debug Function ////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Displays the input string in the debugger Console
+function debugFinance(i_msg_str)
+{
+    console.log(i_msg_str);
+
+    //UtilServer.appendDebugFile(i_msg_str, 'FinanceDebug.txt');
+
+} // debugFinance
+
+function bankDataToConsole()
+{
+     var entry_number = 197;
+
+    entry_number = 58;
+    
+    debugFinance('Bank data for entry number: ' + entry_number);
 
     var n_statements = g_bank_camt_xml.getNumberOfStatements();
 
@@ -68,8 +198,6 @@ function onBankCamtXmlLoaded()
     debugFinance('Closing balance amount for statement number ' + statement_number + ': ' + closing_balance_amount);
 
     debugFinance('Number of balances for statement number ' + statement_number + ': ' + number_balances);
-
-    var entry_number = 197;
 
     var entry_unique_reference = g_bank_camt_xml.getAccountServicerReference(statement_number, entry_number);
 
@@ -111,24 +239,7 @@ function onBankCamtXmlLoaded()
 
     debugFinance('Debtor address for entry number ' + entry_number + ': ' + debtor_address);
 
-} // onBankCamtXmlLoaded
-
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////// End Main Functions //////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
-
-///////////////////////////////////////////////////////////////////////////////////////////
-///////////////////////// Start Debug Function ////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////////////////
-
-// Displays the input string in the debugger Console
-function debugFinance(i_msg_str)
-{
-    console.log(i_msg_str);
-
-    //UtilServer.appendDebugFile(i_msg_str, 'FinanceDebug.txt');
-
-} // debugFinance
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////// End Debug Function //////////////////////////////////////////////
