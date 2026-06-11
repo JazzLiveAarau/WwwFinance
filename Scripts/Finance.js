@@ -1,5 +1,5 @@
 // File: Finance.js
-// Date: 2026-06-10
+// Date: 2026-06-11
 // Author: Gunnar Lidén
 
 // Inhalt
@@ -221,9 +221,7 @@ function debugFinance(i_msg_str)
 
 function bankDataToConsole()
 {
-     var entry_number = 197;
-
-    entry_number = 58;
+     var entry_number = 19;
     
     debugFinance('Bank data for entry number: ' + entry_number);
 
